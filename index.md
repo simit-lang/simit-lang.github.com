@@ -10,4 +10,4 @@ E-mail: <input name="email" /><input type="submit" value="Sign me up" />
 </form>
 <br/>
 
-In the meantime you can check out our [TOG 2016 paper](tog16), which will be presented at SIGGRAPH 2016 in the [Rendering & Simulation with GPUs](http://s2016.siggraph.org/technical-papers/sessions/rendering-simulation-gpus) section on Wednesday 27 July, 3:45--5:55 pm in Ballroom C.
+In the meantime you can check out our [TOG 2016 paper](tog16), which will be presented at SIGGRAPH 2016 in the [Rendering & Simulation with GPUs](http://s2016.siggraph.org/technical-papers/sessions/rendering-simulation-gpus) section on Wednesday 27 July at 3:45--5:55 pm in Ballroom C.
