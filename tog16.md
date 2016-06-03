@@ -5,6 +5,8 @@ title: Simit - A Language for Physical Simulation
 Simit: A Language for Physical Simulation
 =========================================
 
+{{site.data.people[fred].name}}
+
 Fredrik Kjolstad, Shoaib Kamil, Jonathan Ragan-Kelley, David I. W. Levin, Shinjiro Sueda, Desai Chen, Etienne Vouga, Danny M. Kaufman, Gurtej Kanwar, Wojciech Matusik, and Saman Amarasinghe
 
 ![Simit](http://groups.csail.mit.edu/commit/images/simit.jpg)
