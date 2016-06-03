@@ -5,4 +5,4 @@ title: Simit - A Language for Physical Simulation
 Simit: A Language for Physical Simulation
 =========================================
 
-![Simit](simit.jpg)
+![Simit](http://groups.csail.mit.edu/commit/images/simit.jpg)
