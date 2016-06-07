@@ -6,7 +6,7 @@ Simit is a new programming language that makes it easy to compute on sparse syst
 
 Global computations also start locally with functions applied to each vertex or edge. However, instead of updating local state the local functions now assemble a piece of a global vector or matrix. After this assembly, you can compute using normal linear algebra on the global vectors and matries, and resulting vectors can be stored back to graph fields. The Simit compiler takes care of exploiting sparsity and other optimizations, leading to code that is often simpler than Matlab yet comparable in performance to hand-optimized C++.
 
-Simit graphs are more flexible than what you will find in other graph frameworks. A Simit graph consists of any number of sets. Some of these are vertex sets while others are edge sets. Both vertex and edge sets can have data fields, but the edges of an edge set also connects vertices/edges from other sets.
+Simit graphs are more flexible than what you will find in other graph frameworks. A Simit graph consists of any number of sets. Some of these are vertex sets while others are edge sets. Both vertex and edge sets can have data fields, but the edges of an edge set also connects vertices/edges from other sets. Finally, edges can connect any number of vertices/edges, which means that graphs in Simti are hypergraphs.
 
 We plan to release Simit this summer (2016) under a permissive MIT license. If you wish to get release emails and announcements then sign up to the simit-announce email list:
 <form action="https://lists.csail.mit.edu/mailman/subscribe/simit-announce" method="POST">
