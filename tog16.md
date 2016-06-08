@@ -7,9 +7,9 @@ Simit: A Language for Physical Simulation
 
 {% assign authorids=site.data.papers.tog16.authors %}
 {% assign lastauthorid=authorids|last %}
-{% assign num_authors=site.data.papers.tog16.authors|size %}
+{% assign num_authors=authorids|size %}
 {% assign num_authors_minus_1=num_authors|minus: 1 %}
-{% for authorid in site.data.papers.tog16.authors limit:num_authors_minus_1 %} {% assign author=site.data.authors[authorid] %}[{{ author.name }}]({{ author.site }}), {% endfor %} and 
+{% for authorid in authorids limit:num_authors_minus_1 %} {% assign author=site.data.authors[authorid] %}[{{ author.name }}]({{ author.site }}), {% endfor %} and 
 [{{site.data.authors[lastauthorid].name}}]({{site.data.authors[lastauthorid].site}})
 
 ![Simit](http://groups.csail.mit.edu/commit/images/simit.jpg)
@@ -20,7 +20,7 @@ With existing programming tools, writing high-performance simulation code is lab
 In this article, we present Simit, a new language for physical simulations that lets the programmer view the system both as a linked data structure in the form of a hypergraph and as a set of global vectors, matrices, and tensors depending on what is convenient at any given time. Simit provides a novel assembly construct that makes it conceptually easy and computationally efficient to move between the two abstractions. Using the information provided by the assembly construct, the compiler generates efficient in-place computation on the graph. We demonstrate that Simit is easy to use: a Simit program is typically shorter than a Matlab program; that it is high performance: a Simit program running sequentially on a CPU performs comparably to hand-optimized simulations; and that it is portable: Simit programs can be compiled for GPUs with no change to the program, delivering 4 to 20× speedups over our optimized CPU code.
 
 ## Files
-Paper: [[PDF]](http://groups.csail.mit.edu/commit/papers/2016/simit.pdf)
+Paper: [[pdf]]({{site.data.papers.tog16.paper}})
 
 ## BibTex
     @article{kjolstad:2016,

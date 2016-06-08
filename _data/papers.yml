@@ -11,3 +11,10 @@ tog16:
     - tej
     - wojciech
     - saman
+  paper: http://groups.csail.mit.edu/commit/papers/2016/simit.pdf
+
+tog16e:
+  authors:
+    - fred
+    - gilbert
+  paper: http://dl.acm.org/citation.cfm?id=2930661 # {{site.data.papers.tog16.paper}}
