@@ -21,8 +21,8 @@ vectors and matrices without indexing bugs.  It also lets the Simit compiler
 and runtime reason about where matrices come from, what similarities they share
 and how they relate to graphs, which they use to optimize for performance.
 
-[The Simit C++ API](api-reference) is the means for interacting with Simit. You
-use it to construct graph data structures, to load and compile Simit programs,
-and to run them on the graph data structures. Graphs are built from vertex and
-edge sets and all set elements can have scalar or dense vector, matrix or
-higher-order tensor fields.
+[The Simit C++ API](api-reference) lets you interact with Simit. You use it to
+construct graph data structures, to load and compile Simit programs, and to run
+them on the graph data structures. Graphs are built from vertex and edge sets
+and all set elements can have scalar or dense vector, matrix or higher-order
+tensor fields.
