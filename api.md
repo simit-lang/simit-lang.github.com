@@ -11,7 +11,7 @@ Simit programs. The Simit C++ API consists of two main parts: a Set API for
 assembling graphs, and an API for loading, compiling and running Simit program
 on those graphs. The Simit APIs lives in the `simit::` namespace.
 
-## Graph API ([graph.h](https://github.com/fredrikbk/simit/blob/master/src/graph.h))
+## Graph API  ([graph.h](https://github.com/simit-lang/simit/blob/master/src/graph.h))
 The Simit Graph API lets you construct graphs from sets, add elements to those
 sets and write data to those elements. The main class is `Set`:
 
@@ -143,7 +143,8 @@ for (simit::Set::ElementIterator p = points.begin(); it != points.end(); ++p) {
 }
 ```
 
-## Program API ([program.h](https://github.com/fredrikbk/simit/blob/master/src/program.h))
+## Program API  ([program.h](https://github.com/simit-lang/simit/blob/master/src/program.h))
+
 The Simit Program API lets you:
 
 - Load Simit source code from strings and files into a `Program` object,
@@ -181,7 +182,10 @@ C++ `points` object to the `extern points` set in the Simit source code:
 newton_method.bind("points", &points);
 ```
 
-Once all the arguments to the Simit function and all the global `extern` variables has been bound we can execute the function using the `simit::Function::runSafe` method:
+Once all the arguments to the Simit function and all the global `extern`
+variables has been bound we can execute the function using the
+`simit::Function::runSafe` method:
+
 ```
 newton_method.runSafe();
 ```
