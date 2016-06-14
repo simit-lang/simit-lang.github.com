@@ -1,9 +1,11 @@
 ---
 layout: post
-title: Documentation
+title: Getting Started
 ---
-Documentation
-=============
+Getting Started
+===============
+___The these pages are under construction___
+
 In Simit you compute on graphs using linear algebra on vectors and matrices.
 For example, to write a physical simulation you model your physical system as a
 graph, assemble global vectors and matrices from this graph, and then compute
