@@ -15,6 +15,6 @@ tog16:
 
 tog16e:
   authors:
-    - fred
     - gilbert
+    - fred
   paper: http://groups.csail.mit.edu/commit/papers/2016/why.pdf
