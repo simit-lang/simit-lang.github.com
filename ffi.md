@@ -4,7 +4,7 @@ title: Simit FFI
 ---
 The Simit Foreign Function Interface
 ====================================
-___The these pages are under construction___
+___These pages are under construction___
 
 The Simit Foreign Function Interface (ffi) lets Simit code call functions written in C.  The `extern` keyword is used to call C functions. Extern functions can accept or return any number of Simit scalar, vector and matrix arguments. Passing elements or sets to extern functions is not supported. The argument list of the C function must contain all the Simit arguments followed by the result arguments, which are passed in using a pointer. A vector and matrix argument passed into an extern function must be matched by one or more arguments describing the vector or matrix type (e.g. it's size) followed by one argument for its value.
 
