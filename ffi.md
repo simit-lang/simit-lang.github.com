@@ -6,20 +6,42 @@ The Simit Foreign Function Interface
 ====================================
 ___The these pages are under construction___
 
-The Simit Foreign Function Interface (ffi) lets Simit code call functions written in C.  The `extern` keyword is used to call C functions. Extern functions can accept or return any number of Simit scalar, vector and matrix arguments. Passing elements or sets to extern functions is not supported. The argument list of the C function must contain all the Simit arguments followed by the result arguments, which are passed in using pointers to pointers. A vector and matrix argument passed into an extern function must be matched by one or more arguments describing the vector or matrix type (e.g. it's size) followed by one argument for its value.
+The Simit Foreign Function Interface (ffi) lets Simit code call functions written in C.  The `extern` keyword is used to call C functions. Extern functions can accept or return any number of Simit scalar, vector and matrix arguments. Passing elements or sets to extern functions is not supported. The argument list of the C function must contain all the Simit arguments followed by the result arguments, which are passed in using a pointer. A vector and matrix argument passed into an extern function must be matched by one or more arguments describing the vector or matrix type (e.g. it's size) followed by one argument for its value.
 
-The following declares a function `foo` written in C and linked to the program:
+The following declares a function `printscalar` written in C and linked to the program:
 
 ```
-extern func foo(a : vector[3](int));
+extern func printscalar(a : vector[3](int));
 
 export func main()
-  vec : vector[3](int) = [1, 2, 3];
-  foo(vec);
+  scalar : int = 2;
+  printscalar(vec);
 end
 ```
 
 The C function `foo` can be defined as follows:
+
+```c
+int printscalar(int a) {
+  printf("%d\n", a);
+  return 0;  // Return success error code
+}
+```
+
+Since the argument is a scalar it is passed by value. The functions returns an error code (0 for success, any other value for failure). This error code is not a part of the Simit program, but a failure will cause an exception to be thrown from the `simit::Function::run` method.
+
+The next example declares and calls a function that prints a vector.
+
+```
+extern func printvector(a : vector[3](int));
+
+export func main()
+  vec : vector[3](int) = [1, 2, 3];
+  printvector(vec);
+end
+```
+
+The C function is defined as follows
 
 ```c
 int foo(int n, int* a) {
@@ -34,6 +56,44 @@ int foo(int n, int* a) {
   return 0;  // Return success error code
 }
 ```
-The argument list contains the vector's size followed by a pointer to it's values. The functions returns an error code (0 for success, any other value for failure). This error code is not a part of the Simit program, but a failure will cause an exception to be thrown from the `simit::Function::run` method.
 
-**TODO: System dimensions, matrices, ...**
+For vectors the argument list contains the vector's size followed by a pointer to it's values.
+
+The following table lists the required C formal arguments for dense Simit vectors and matrices. In the following all Simit floats are double precision, `V` refers to a Simit set, and `3` can be replaced by any number.
+
+| Simit Actual                  | C Formal                     |
+|-------------------------------|------------------------------|
+| `int`                         | `int`                        |
+| `vector[3](float)`            | `int, double*`               |
+| `vector[V](float)`            | `int, double*`               |
+| `vector[V](vector[3](float))` | `int, int, double*`          |
+| `matrix[3,3](float)`          | `int, int, double*`          |
+
+The blocked types have two sets of type arguments. The first set describes the number of blocks in each dimension (one for vector, two for matrices). The second set describes the size of each block in each dimension.
+
+The next table lists the C formal arguments for sparse Simit matrices:
+
+| Simit Actual                      | C Formal                                  |
+|-----------------------------------|-------------------------------------------|
+| `matrix[V,V](float)`              | `int, int, int*, int*, double*`           |
+| `matrix[V,V](matrix[3,3](float))` | `int, int, int*, int*, int, int, double*` |
+[...]
+
+The following table lists the required C formal arguments for dense Simit function results (return values):
+
+| Simit                             | C                    |
+|-----------------------------------|----------------------|
+| `int`                             | `int*`               |
+| `vector[3](float)`                | `int, double**`      |
+| `vector[V](float)`                | `int, double**`      |
+| `vector[V](vector[3](float))`     | `int, int, double**` |
+| `matrix[3,3](float)`              | `int, int, double**` |
+[...]
+
+The final table lists the required C formal arguments for sparse Simit function results:
+
+| Simit                             | C                                            |
+|-----------------------------------|----------------------------------------------|
+| `matrix[V,V](float)`              | `int, int, int**, int**, double**`           |
+| `matrix[V,V](matrix[3,3](float))` | `int, int, int**, int**, int, int, double**` |
+[...]
