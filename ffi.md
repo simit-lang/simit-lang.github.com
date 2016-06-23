@@ -77,6 +77,7 @@ The next table lists the C formal arguments for sparse Simit matrices:
 |-----------------------------------|-------------------------------------------|
 | `matrix[V,V](float)`              | `int, int, int*, int*, double*`           |
 | `matrix[V,V](matrix[3,3](float))` | `int, int, int*, int*, int, int, double*` |
+
 [...]
 
 The following table lists the required C formal arguments for dense Simit function results (return values):
@@ -88,6 +89,7 @@ The following table lists the required C formal arguments for dense Simit functi
 | `vector[V](float)`                | `int, double**`      |
 | `vector[V](vector[3](float))`     | `int, int, double**` |
 | `matrix[3,3](float)`              | `int, int, double**` |
+
 [...]
 
 The final table lists the required C formal arguments for sparse Simit function results:
@@ -96,4 +98,5 @@ The final table lists the required C formal arguments for sparse Simit function 
 |-----------------------------------|----------------------------------------------|
 | `matrix[V,V](float)`              | `int, int, int**, int**, double**`           |
 | `matrix[V,V](matrix[3,3](float))` | `int, int, int**, int**, int, int, double**` |
+
 [...]
