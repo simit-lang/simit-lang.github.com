@@ -9,20 +9,19 @@ ___The these pages are under construction___
 * auto-gen TOC:
 {:toc}
 
-The purpose of this guide is to introduce the various features of the Simit
-language and, through some simple examples, demonstrate how they can be used in
-actual programs. Here we assume that you are already familiar with the
-fundamentals of imperative programming.
+This guide introduces Simit language features and shows how they can be used in
+programs. We assume that you are already familiar with imperative programming
+and some linear algebra.
 
 
 # Basics
 Simit is an imperative language with statements, control flow and linear
-algebra statements. In this section, we describe some of the language's basic
+algebra expressions. In this section, we describe some of the language's basic
 constructs.
 
 ## Functions
-A function can take zero or more arguments. In the following example the
-function `add` takes two arguments of type `float`.
+A function takes any number of arguments including zero. In the following
+example the function `add` takes two arguments of type `float`.
 
 ```
 func add(a : float, b : float) -> (c : float)
@@ -30,14 +29,13 @@ func add(a : float, b : float) -> (c : float)
 end
 ```
 
-Note that types follow variable names and are separated from them by a `:`.
-Further, note that function returned variable name follows the argument list
-and is separated from it by a `->`. Finally, note that the function body is
-terminated by the `end` keyword, in the same style as Matlab.
+Types follow variable names separated by a `:`.  Further, function result
+variables follow the argument list separated by a `->`. Finally, function
+bodies are terminated by the `end` keyword, in the same style as Matlab.
 
 ## Variables
-Variables can be defined in global scope or in function bodies. The `var`
-keyword defines a new variable. To declare an int variable you write
+Variables are declared in function bodies or in global scope using the `var`
+keyword. To declare an integer variable you write:
 
 ```
 var foo : int;
@@ -45,7 +43,7 @@ var foo : int;
 
 If the variable declaration has an initializer then the type can be inferred
 from the initializer value. The following statement define a float variable
-that is initialized to `0.0`
+that is initialized to `0.0`:
 
 ```
 var foo : float = 0.0;
