@@ -13,6 +13,9 @@ on these using linear algebra.  The Simit programming system consists of a
 programming language and a C++ API.  The design is similar to the OpenGL API,
 with graphs instead of triangle meshes and Simit programs instead of shaders.
 
+[The Tutorials](tutorials) show you how to write and compile your first Simit
+programs.
+
 [The Simit Programming Language](language) lets you write programs
 to compute on graphs using linear algebra.  It is an imperative language
 similar to Matlab, with standard control flow and linear algebra statements.
