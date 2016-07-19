@@ -4,8 +4,6 @@ title: Getting Started
 ---
 Getting Started
 ===============
-___The these pages are under construction___
-
 In Simit you compute on graphs using linear algebra on vectors and matrices.
 For example, to write a physical simulation you model your physical system as a
 graph, assemble global vectors and matrices from this graph, and then compute
@@ -13,8 +11,9 @@ on these using linear algebra.  The Simit programming system consists of a
 programming language and a C++ API.  The design is similar to the OpenGL API,
 with graphs instead of triangle meshes and Simit programs instead of shaders.
 
-[The Tutorials](tutorials) show you how to write and compile your first Simit
-programs.
+[The apps Directory](https://github.com/simit-lang/simit/tree/master/apps/springs)
+in the Simit release contains examples of complete Simit programs.  These are
+easy to build and should help you get started.
 
 [The Simit Programming Language](language) lets you write programs
 to compute on graphs using linear algebra.  It is an imperative language
