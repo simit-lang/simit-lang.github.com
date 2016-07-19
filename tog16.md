@@ -12,7 +12,7 @@ Simit: A Language for Physical Simulation
 {% for authorid in authorids limit:num_authors_minus_1 %} {% assign author=site.data.authors[authorid] %}[{{ author.name }}]({{ author.site }}), {% endfor %} and 
 [{{site.data.authors[lastauthorid].name}}]({{site.data.authors[lastauthorid].site}})
 
-![Simit](http://groups.csail.mit.edu/commit/images/simit.jpg)
+![Simit]({{site.data.papers.tog16.image}})
 
 ## Abstract
 With existing programming tools, writing high-performance simulation code is labor intensive and requires sacrificing readability and portability. The alternative is to prototype simulations in a high-level language like Matlab, thereby sacrificing performance. The Matlab programming model naturally describes the behavior of an entire physical system using the language of linear algebra. However, simulations also manipulate individual geometric elements, which are best represented using linked data structures like meshes. Translating between the linked data structures and linear algebra comes at significant cost, both to the programmer and to the machine. High-performance implementations avoid the cost by rephrasing the computation in terms of linked or index data structures, leaving the code complicated and monolithic, often increasing its size by an order of magnitude.

@@ -12,6 +12,8 @@ tog16:
     - wojciech
     - saman
   paper: http://groups.csail.mit.edu/commit/papers/2016/simit.pdf
+  image: http://groups.csail.mit.edu/commit/papers/2016/simit.jpg
+  movie: http://groups.csail.mit.edu/commit/papers/2016/simit.mov
 
 tog16e:
   authors:
