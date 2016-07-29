@@ -33,16 +33,7 @@ Simit is open source, under a [commercially permissive MIT
 license](https://github.com/simit-lang/simit/blob/master/LICENSE). We encourage
 you to use it in open source or commercial projects!
 
-To learn more about the Simit programming model you can check out our [TOG 2016
-paper](tog16), which we will present at SIGGRAPH 2016 in the [Rendering &
-Simulation with
-GPUs](http://s2016.siggraph.org/technical-papers/sessions/rendering-simulation-gpus)
-section on Wednesday 27 July at 3:45--5:55 pm in Ballroom C.
+To learn more about the Simit programming model check out our [TOG 2016
+paper](tog16):
 <iframe width="500" height="281" src="{{site.data.papers.tog16.movie}}" frameborder="0" allowfullscreen></iframe>
 <br/>
-
-If you want announcements and release emails then sign up to the
-`simit-announce` email list:
-<form action="https://lists.csail.mit.edu/mailman/subscribe/simit-announce" method="POST">
-E-mail: <input name="email" /><input type="submit" value="Sign me up" />
-</form>
