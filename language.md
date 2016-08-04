@@ -557,3 +557,32 @@ assembly map expression to assemble the stiffness matrix for the whole system:
 ```
 K = map tet_stiffness to tetrahedra reduce +;
 ```
+
+# Built-in Functions
+The following functions are built into Simit:
+
+## Scalar Math
+- `mod(a : int, b : int) -> c : int`
+- `sin(a : float) -> b : float`
+- `cos(a : float) -> b : float`
+- `tan(a : float) -> b : float`
+- `asin(a : float) -> b : float`
+- `acos(a : float) -> b : float`
+- `atan2(a : float, b : float) -> c : float`
+- `sqrt(a : float) -> b : float`
+- `log(a : float) -> b : float`
+- `exp(a : float) -> b : float`
+- `pow(a : float, b : float) -> c : float`
+
+## Vector Math
+- `det(a : matrix[3,3](float))`
+- `inv(a : matrix[3,3](float))`
+- `norm<N>(a : vector[N](float)) -> b : vector[N](float)`
+- `dot<N>(a : vector[N](float)) -> b : vector[N](float)`
+
+## Complex Numbers
+- `createComplex(r : float, i : float) -> c : complex`
+- `complexNorm(c : complex) -> n : float`
+- `complexGetReal(c : complex) -> r : float`
+- `complexGetImag(c : complex) -> i : float`
+- `complexConj(a : complex) -> b : complex`
