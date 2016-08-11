@@ -4,8 +4,8 @@ title: Simit - A language for computing on sparse systems
 ---
 
 <meta name="Description" content="Simit is a programming language for computing
-on sparse systems using linear algebra. Simit programs are short and readable,
-yet perform like hand-optimized code and also run on GPUs.">
+on sparse systems using linear algebra. Programs are short, readable,
+performant and portable (CPU and GPU).">
 
 Simit is a new programming language that makes it easy to compute on sparse
 systems using linear algebra.  Simit programs are typically shorter than Matlab
