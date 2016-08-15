@@ -417,7 +417,7 @@ set of tetrahedra:
 extern links :  set{Link}(triangles, tetrahedra);
 ```
 
-##Applying Stencil Update Functions
+## Applying Stencil Update Functions
 A stencil update function is a function that takes as arguments an element and,
 if the element is an edge, it's endpoints. It may read from the element and its
 endpoint. If it writes to the element it is called a _pull_ (or gather) stencil
@@ -461,7 +461,7 @@ To apply the function to the springs we use an apply statement.
 apply length to springs;
 ```
 
-##System Vectors and Matrices
+## System Vectors and Matrices
 In addition to integer ranges, the dimensions of vectors and matrices can be a
 _set_. We call such vectors and matrices _system_ vectors and matrices and they
 can describe properties of an entire physical system. A system vector can be
