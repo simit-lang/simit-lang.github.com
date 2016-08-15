@@ -4,46 +4,80 @@ title: The Simit Programming Language
 ---
 The Simit Programming Language
 ==============================
-___The these pages are under construction___
-
-* auto-gen TOC:
-{:toc}
+{:.no_toc}
+___Note: this page is under construction___
 
 This guide introduces Simit language features and shows how they can be used in
 programs. We assume that you are already familiar with imperative programming
 and some linear algebra.
 
+* auto-gen TOC:
+{:toc}
 
 # Basics
 Simit is an imperative language with statements, control flow and linear
 algebra expressions. In this section, we describe some of the language's basic
 constructs.
 
-## Functions
-A function takes any number of arguments including zero. In the following
-example the function `add` takes two arguments of type `float`.
+## Functions and Procedures
+Functions can take any number of parameters, including none. Each parameter must 
+be declared with its name followed by its type (separated by a `:`). In the 
+following example, the function `add` takes two parameters named `a` and `b`, 
+both of which are of type `float`, and returns a single result (named `c`) that
+is also of type `float`.
 
 ```
-func add(a : float, b : float) -> (c : float)
+func add(a : float, b : float) -> c : float
   c = a + b;
 end
 ```
 
-Types follow variable names separated by a `:`.  Further, function result
-variables follow the argument list separated by a `->`. Finally, function
-bodies are terminated by the `end` keyword, in the same style as Matlab.
+Like functions in MATLAB, functions in Simit can also return any number of 
+results, including none. In this next example, the function `minMax` takes two 
+`float` parameters and return two `float` results: the smaller of the two inputs 
+as the first result and the larger of the two inputs as the second result.
+
+```
+func minMax(a : float, b : float) 
+    -> (c : float, d : float)
+  if a < b
+    c = a;
+    d = b;
+  else
+    c = b;
+    d = a;
+  end
+end
+```
+
+Observe that the list of function results is separated from the list of 
+parameters by a `->`. Furthermore, note that the list of function results must 
+be surrounded by parentheses if the function returns more than one result. 
+(The parentheses are optional if the function returns just a single result.) 
+Function declarations are delimited by the `end` keyword.
+
+Exported functions (i.e. procedures) can be declared by prepending an ordinary 
+function declaration with the keyword `export`, as demonstrated below. Note 
+that even though `main` does not take any parameter, an (empty) parameter list 
+still needs to be included in the function declaration.
+
+```
+export func main()
+  % Do something here
+end
+```
 
 ## Variables
-Variables are declared in function bodies or in global scope using the `var`
-keyword. To declare an integer variable you write:
+Variables are declared in function bodies or in the global scope using the `var`
+keyword. The following example declares an integer variable named `foo`:
 
 ```
 var foo : int;
 ```
 
-If the variable declaration has an initializer then the type can be inferred
-from the initializer value. The following statement define a float variable
-that is initialized to `0.0`:
+If the variable declaration has an initializer, then the variable's type can be 
+inferred from the initializer value. The following are two different ways to 
+define a floating-point variable that is initialized to `0.0`:
 
 ```
 var foo : float = 0.0;
@@ -51,50 +85,57 @@ var foo = 0.0;
 ```
 
 The `const` keyword creates a variable that is constant after initialization,
-which means you can't write to it. The following statements create constant
-variables
+meaning you cannot modify it. The following example shows three different ways 
+to declare constant variables that are initialized to `0.0`:
 
 ```
 const foo = 0.0;
 const bar = foo;
-foo = 0.0;
+bazz = 0.0;
 ```
 
-Note that variables are const by default, and that eliding the `var`/`const`
-keyword leaves the variable as const.
+Note that variables are const by default; variables that are declared without 
+the `var` or `const` keywords are treated as const.
 
 ## Basic Types
 Simit is statically typed with type inference. This means that the type of
-everything is known at compile time, but that you don't have to explicitly
-write it if it can be inferred from the right-hand side of an assignment.
+every variable is known at compile time, but that you do not have to explicitly
+specify it; the compiler will figure that out automatically.
 
-The basic types are `bool`, `int`, `float` and `complex`:
+The basic types in Simit are `bool`, `int`, `float` and `complex`:
 
 ```
-mybool    : bool    = false;
-myint     : int     = 0;
-myfloat   : float   = 0.0;
-mycomplex : complex = <0.0, 0.0>;
+var mybool    : bool    = false;
+var myint     : int     = 0;
+var myfloat   : float   = 0.0;
+var mycomplex : complex = <0.0, 0.0>;
 ```
 
-The `float` and `complex` types are a double precision floating point by
-default when you use the CPU backend, but this can be changed to single
-precision floating point when compiling a Simit program. The GPU backend
-currently supports only single precision floating point.
+The `float` and `complex` types are double-precision floating-point by default
+when you use the CPU backend, but this can be changed to single-precision 
+floating-point when compiling a Simit program. The GPU backend currently only 
+supports single-precision floating-point `float` and `complex` types.
+
+Simit also supports a `string` type that can be used for I/O and debugging. The 
+following example declares a variable containing the string "Hello world!":
+
+```
+var mystr : string = "Hello world!";
+```
 
 ## Comments
-Single-line comments start with `%`.
+Single-line comments start with `%`:
 
 ```
-h = 0.01;  % h is the time-step size
+h = 0.01;  % h is the time-step size.
 ```
 
-Multi-line comments are surrounded by `%{` and `%}`.
+Multi-line comments are surrounded by `%{` and `%}`:
 
 ```
 %{
-h is the
-time-step size.
+h is the time-step size.
+h is initialized to 0.01.
 %}
 h = 0.01;
 ```
@@ -103,7 +144,7 @@ h = 0.01;
 # Control Flow Statements
 
 Simit supports a variety of control flow constructs, including `if` statements,
-`while` loops, `do`-`while` loops, and `for` loops.
+`while` loops, `do`-`while` loops and `for` loops.
 
 ## If Statements
 
@@ -154,8 +195,8 @@ if x >= 1 and x <= 5
 end
 ```
 
-In fact, we can rewrite the above code even more succinctly by chaining the
-comparisons:
+In fact, we could have written the above code even more succinctly by chaining 
+the comparisons as follows:
 
 ```
 if 1 <= x <= 5
@@ -193,7 +234,7 @@ be executed at least once even if the condition is never true.
 
 ## For Loops
 
-Simit `for` loops are more like those found in Matlab and Julia than those
+Simit `for` loops are more like those found in MATLAB and Julia than those
 available in C. They can be used to iterate over elements in a Simit set. For
 example (pun intended):
 
@@ -204,7 +245,7 @@ end
 ```
 
 You can also use a `for` loop to iterate over the set of all integers between
-two values:
+two values, as shown in the following example.
 
 ```
 for i in 0:10
@@ -221,74 +262,85 @@ Vector and matrix variables have types, and in the simplest case these just
 define the size of each dimension:
 
 ```
-var vec : vector[3](float);    % A column vector of three floats
-var vec : vector[3](float)';   % A row vector of three floats
-var mat : matrix[3,3](float);  % A 3x3 matrix of floats
+% A column vector of three floats
+var vec : vector[3](float);
+
+% A row vector of three floats
+var vec : vector[3](float)';
+
+% A 3 x 3 matrix of floats
+var mat : matrix[3,3](float);
 ```
 
 Vectors and matrices can also be blocked:
 
 ```
-var vec : vector[3](vector[2](float));  % A 3-vector with 2-vector blocks
+% A 3-vector with 2-vector blocks
+var vec : vector[3](vector[2](float));
 ```
 
-There are two types of vector/matrix dimensions. Above we showed vectors and
-matrices with simple integer range dimensions. These are much like one- and
-two-dimensional arrays in languages like C. But vector and matrix dimensions
-can also be Simit sets and we explain this in the [System Vectors and
-Matrices](#system-vectors-and-matrices) section.
+There are two types of vector/matrix dimensions. The examples above show 
+vectors and matrices with simple integer range dimensions. These are much like 
+one- and two-dimensional arrays in languages like C. However, vector and matrix 
+dimensions can also be Simit sets; this is explained in more detail in the 
+[System Vectors and Matrices](#system-vectors-and-matrices) section.
 
 ## Literals
-Vector and matrix literals are defined using simple intuitive syntax:
+The syntax for declaring vector literals in Simit is very similar to that of 
+MATLAB, as the following examples illustrate. Note that vector literals are 
+_row-major_ by default; column vector literals can be created by transposing 
+row vector literals.
 
 ```
-% A row 3-vector containing the gravity constant
-gravity : vector[3](float) = [0.0, 0.0, 9.8];
+% A column 3-vector containing the gravity constant (g)
+const gravity : vector[3](float) = [0.0, 0.0, 9.8]';
 
-% Same as the previous line, but with inferred type
-gravity = [0.0, 0.0, 9.8];
+% Same as above, but with comma separators omitted
+const gravity : vector[3](float) = [0.0 0.0 9.8]';
 
-% 2x2 matrix of integers
+% Same as above, but with the type inferred
+gravity = [0.0 0.0 9.8]';
+```
+
+Simit also supports the MATLAB syntax for declaring matrix literals in addition  
+to an alternative, more regular syntax inspired by Mathematica:
+
+```
+% 2 x 2 matrix of integers
 mat = [1, 2; 3, 4];
 
-% 2x1 matrix whose type is inferred
+% Same as above, but with comma separators omitted
+mat = [1 2; 3 4];
+
+% Same as above, but expressed in alternative syntax
+mat = [[1, 2], [3, 4]];
+
+% 2 x 1 matrix of floats
 mat21 = [1.0; 2.0];
 
-% 1x2 matrix but cannot infer type since literal is a vector!
-mat12 : matrix[1,2](float) = [1.0, 2.0];
-```
-
-Note that vector literals are row-major by default! To make a column vector
-literal you must transpose them:
-
-```
-gravity = [0.0 0.0 9.8]';  % A column 3-vector containing the gravity constant
-```
-
-There is also a more regular matrix literal syntax:
-
-```
-% 2x2 matrix of integers
-mat = [[1, 2], [3, 4]];
+% 1 x 2 matrix of floats
+mat12 = [[1, 2]];
 ```
 
 ## Linear Algebra
-Simit supports the basic linear algebra expressions, where vectors are
-column-oriented by default. The following statements shows several linear
-algebra computations:
+Simit supports a wide variety of basic linear algebra operations, as shown 
+below. (In the following examples, `b` and `c` are assumed to be column 
+vectors.)
 
 ```
 a = b  + c;   % Vector addition
 a = b  - c;   % Vector subtraction
-a = b';       % Transpose a column vector to a row vector
+a = b';       % Vector transpose
 a = b' * c;   % Inner product
 a = b  * c';  % Outer product
 
 A = B + C;    % Matrix addition
 A = B - C;    % Matrix subtraction
 A = B * C;    % Matrix multiplication
+A = B';       % Matrix transpose
 
-A = (B+C)*d;  % Compound expression
+A = B  * c;   % Matrix-vector multiplication
+A = c' * B;   % Vector-matrix multiplication
 
 a = b .* c;   % Vector component-wise multiplication
 a = b ./ c;   % Vector component-wise division
@@ -296,45 +348,130 @@ A = B .* C;   % Matrix element-wise multiplication
 A = B ./ C;   % Matrix element-wise multiplication
 ```
 
+Linear algebra operations can be arbitrarily composed to form complex 
+expressions. For instance, the following example multiplies the sum of two 
+matrices `B` and `C` by the component-wise product of two column vectors `d` 
+and `e`.
+
+```
+A = (B + C) * (d .* e);
+```
+
 ## Indexing
-Vectors and matrices are indexed using parentheses with zero-based indexing:
+Vectors and matrices can be indexed using parentheses, as demonstrated below. 
+Note that, unlike MATLAB, indices are zero-based.
 
 ```
-var a : vector[2](float);
-a(0)   = 0.0;
+var a : vector[2](float) = 0.0;
+a(0)   = 1.0;  % a == [1.0, 0.0]
 
-var A : vector[2,3](float);
-A(0,2) = 0.0;
+var A : vector[2,3](float) = 0.0;
+A(0,2) = 1.0;  % a == [0.0, 0.0, 1.0; 0.0, 0.0, 0.0]
 ```
 
-Blocked vectors and matrices are indexed using multiple parentheses:
+Blocked vectors and matrices can be indexed using multiple parentheses:
 
 ```
-var a : vector[3](vector[2)(float));
-a(2)(1) = 0.0;
+var a : vector[3](vector[2](float)) = 0.0;
+a(2)(1) = 1.0;  % a(0) == a(1) == [0.0, 0.0]'
+                % a(2) == [0.0, 1.0]'
 ```
 
 ## Slicing
-You can also use `:` slicing syntax to retrieve a row or column of a matrix:
+You can also use the `:` operator to select a single row or column from a 
+matrix:
 
 ```
 A : matrix[2,2](float) = [1.0, 2.0; 3.0, 4.0];
-a : vector[3](float) = A(:,1);  % a == [2.0, 4.0]
+a : vector[2](float) = A(:,1);  % a == [2.0, 4.0]'
+```
+
+## Generic Range Dimensions
+In all of the examples above, vectors and matrices have range dimensions that 
+are integer literals. Very often though, you might want to define functions 
+that work with vectors and matrices of arbitrary sizes as opposed to some fixed 
+sizes, similar to how operators like `+` and `*` can operate on vectors and 
+matrices of any size. This can be done in Simit with generics as demonstrated 
+in the following example, which is a function that takes two vectors of any 
+length and returns their element-wise maximum:
+
+```
+func max<0:N>(a : vector[N](int), b : vector[N](int)) 
+    -> c : vector[N](int)
+  for k in 0:N
+    if a(k) >= b(k)
+      c(k) = a(k);
+    else
+      c(k) = b(k);
+    end
+  end
+end
+```
+
+The prefix `0:` in the declaration of the generic parameter tells the compiler 
+that `N` must represent an integer range (as opposed to a Simit set). This 
+allows us to use `N` anywhere within the function body as a constant integer 
+whose value is the upper bound of the range represented by the generic 
+parameter, as we did on the first line of the `for` loop in `max`.
+
+We can now call `max` in the rest of our program with (non-system) vectors of 
+any length as inputs:
+
+```
+a = [0, 2, 4, 6, 8]';
+b = [9, 7, 5, 3, 1]';
+c = max(a, b);  % c == [9, 7, 5, 6, 8]'
+
+u = [1, 3, 5]';
+v = [2, 3, 4]';
+w = max(u, v);  % w == [2, 3, 5]'
+```
+
+However, the following program would not compile because `max` can only accept 
+two vectors that are of the same length:
+
+```
+a = [1, 2, 3]';
+b = [5, 6, 7, 8]';
+c = max(a, b);
+```
+
+Observe that we never had to explicitly specify the value of `N` when calling 
+`max`, since the compiler could deduce what `N` had to be from the dimensions 
+of the inputs. Occasionally though, it might not be possible for the compiler 
+to deduce what the generic arguments to a function call are. Consider this next 
+example, which is a function that outputs an arithmetic sequence:
+
+```
+func arithSeq<0:N>(a0 : int, d : int) 
+    -> a : vector[N](int)
+  for k in 0:N
+    a(k) = a0 + k * d;
+  end
+end
+```
+
+Note that none of the inputs to `arithSeq` has a type that is parameterized by 
+`N`, so in order to call `arithSeq` the value of `N` has to be explicitly 
+specified as part of the function call:
+
+```
+a = arithSeq<5>(1,2);  % a == [1, 3, 5, 7, 9]'
 ```
 
 
 # System Data Structures
-So far we have discussed basic constructs and types. We'll now move on to the
-advanced types that are used to describe the structure of whole physical system
-and the _global_ properties of these systems. This is the part where Simit
-starts to look and feel very different from other languages such as Matlab and
-Julia.
+So far we have focused solely on basic constructs and data types. We will now 
+look at more advanced types that are used to describe the structure of whole 
+physical systems and the _global_ properties of these systems. This is the part 
+where Simit starts to look and feel very different from other languages like 
+MATLAB and Julia.
 
 In Simit, topology is expressed as a _graph_ data structure, and global
 properties are described using system vectors and matrices. A _system_ vector
 or matrix is a vector or matrix whose dimension size(s) are proportional to the
 size of the whole system, as opposed to an _element_ vector or matrix whose
-sizes are a small integer range.
+sizes are small integer ranges.
 
 ## Elements, Sets and Graphs
 Elements, sets and graphs form Simit's _data model_, which is the way you
@@ -342,8 +479,9 @@ represent your physical system.
 
 ### Elements
 An element is a type that stores one or more data fields, and is much like a
-struct in a language like C. For example, a point may store a position vector
-`x` and a velocity vector `v`, while an element may store a scalar mass:
+struct in C and C++. For example, a element representing a point may store a 
+position vector `x` and a velocity vector `v`, while an element represent a 
+spring element may store a scalar mass:
 
 ```
 element Point
@@ -357,147 +495,172 @@ element Element
 end
 ```
 
-To read or write from or to a field of an Element `e` or a Point `p` you use
-`.`:
+To read from or write to a field of an Element `e` or a Point `p`, you would use 
+the `.` operator as demonstrated below:
 
 ```
 e.m = 2.0;
 print e.m;  % 2.0
 
-p.x = [0.0, 0.0, 1.0];
-print p.x;  % [0.0, 0.0, 1.0]
+p.x = [0.0, 0.0, 1.0]';
+print p.x;  % [0.0, 0.0, 1.0]'
 ```
 
 ### Sets
 Unlike a C struct, element instantiations live in sets. So instantiations of
-the Point element above would live in a `points` set:
+the Point element above would need to be stored in some `points` set:
 
 ```
 extern points : set{Point};
 ```
-The `extern` keyword simply means that the verts set comes from outside the
-Simit program. This typically means it has been assembled using the Simit C++
-library.
 
-The best ways to work with sets and to access their elements is to [apply a
-stencil update function](#applying-stencil-update-functions) or to [assemble a
-system vector or matrix](#vector-and-matrix-assembly).
+The `extern` keyword simply means that the `points` set comes from outside the
+Simit program. This typically means the set has been assembled using the Simit 
+C++ library.
+
+The best ways to work with sets and access elements of sets are to [apply 
+stencil update functions](#applying-stencil-update-functions) and to [assemble 
+system vectors or matrices](#vector-and-matrix-assembly).
 
 ### Edge Sets
-Edge sets are sets with additional connectivity information. That is, edge set
-definitions specify the list of sets that each edge's endpoints come from. The
-following declares a set of spring elements that each connect two points:
+Edge sets are sets with additional connectivity information. In particular, edge 
+set definitions specify the list of sets from which each edge's endpoints come. 
+As an example, the following declares a set of spring elements that each connect 
+two points:
 
 ```
 extern springs : set{Element}(points,points);
 ```
 
-Thus, there is no explicit graph type in Simit; graphs are formed implicitly
-from the combination of sets and edge sets. This i similar to the way they are
-often defined in mathematical papers `G=(V,E)`.
+Thus, there is no explicit graph type in Simit; rather, graphs are formed 
+implicitly from the combination of sets and edge sets. This is similar to how 
+graphs are often defined in mathematical papers (i.e. as an ordered pair `G = 
+(V,E)`).
 
-Simit's graphs are hypergraphs, which just means that edges can have more (or
-less) than two endpoints. In other words, each edge can connect n vertices,
-where n is any non-negative integer. Thus, we can easily add additional edge
-sets that contain triangle, tetrahedral or hexahedral elements:
+Simit's graphs are hypergraphs, which simply means that edges can have more (or
+less) than two endpoints. More precisely, graphs in Simit are _k_-uniform 
+hypergraphs; in other words, each edge can (and must) connect _k_ vertices, 
+where _k_ is some non-negative integer constant. Thus, we can easily add 
+additional edge sets that contain triangle, tetrahedral or even hexahedral 
+elements, as demonstrated below:
 
 ```
 extern triangles  : set{Element}(points,points,points);
-extern tetrahedra : set{Element}(points,points,points,points);
-extern hexahedra  : set{Element}(points*8);
-```
-The hexahedra uses a syntactic shortcut that frees us from having to repeat
-`points` eight times, but the meaning is the same as if we did.
-
-Edge sets can also be _heterogeneous_, which means that they can connect two or
-more _different_ sets. The `links` edge set connects a set of triangles to a
-set of tetrahedra:
-
-```
-extern links :  set{Link}(triangles, tetrahedra);
+extern tetrahedra : set{Element}(points * 4);
+extern hexahedra  : set{Element}(points * 6);
 ```
 
-##Applying Stencil Update Functions
-A stencil update function is a function that takes as arguments an element and,
-if the element is an edge, it's endpoints. It may read from the element and its
-endpoint. If it writes to the element it is called a _pull_ (or gather) stencil
-and if it writes to the endpoints then it is called a _push_ (or scatter)
-stencil. Stencil update functions are applied to every element of a set
-concurrently using an _apply_ expression.
+Since `tetrahedra` and `hexahedra` are both _homogeneous_ edge sets (meaning 
+all of their endpoints are elements from the same set `points`) like `triangle`, 
+we could use a syntactic shortcut that freed us from having to write out 
+`points` four or six times. Note that the two ways of declaring homogeneous 
+edge sets shown above are semantically identical.
 
-The following update function that takes a point and moves it one unit in the x
-direction:
+That said, the more verbose syntax also lets us declare _heterogeneous_ edge 
+sets, which are edge sets that can connect two or more _different_ sets. For 
+instance, the `links` edge set below connects a set of triangles to a set of 
+tetrahedra.
 
 ```
-func move(p : Point)
-  p.x(0) += 1.0;  % p.x += [1.0, 0.0, 0.0];
+extern links : set{Link}(triangles, tetrahedra);
+```
+
+## Applying Stencil Update Functions
+A stencil update function is any function that takes as arguments an element 
+and (if the element is an edge) its endpoints. A stencil update function that 
+writes to the input element is called a _pull_ (or _gather_) stencil, while a 
+stencil update function that writes to the endpoints is called a _push_ (or 
+_scatter_) stencil. As an example, the following is a stencil that takes a 
+point and moves it one unit in the x direction:
+
+```
+func move(inout p : Point)
+  p.x(0) += 1.0;  % p.x += [1.0, 0.0, 0.0]';
 end
 ```
 
-It can be applied to the points set using an apply:
+Stencil update functions can be applied to every element of a set concurrently 
+using an `apply` statement. The following moves every point in the `points` set 
+one unit in the x direction:
 
 ```
 apply move to points;
 ```
 
-Since this function is applied to a Point (which is not an edge and has no
-endpoints) it can only access the point and therefore only has a local effect.
+Note that since `move` only takes a single point as input and does not take 
+any endpoint as input, the stencil can access just that one point and therefore 
+only has a local effect.
 
-The following stencil update function that takes a spring, computes its length
-and stores that length in the `l` field:
+A stencil update function that takes an edge in an edge set as input can access 
+the element as well as the endpoints corresponding to that edge. As an example, 
+the following stencil update function takes a spring, computes its length and 
+stores the length into the `l` field of the corresponding element:
 
 ```
-func length(s : Element, p : (Point,Point))
-  s.l = abs(p(0) - p(1));
+func length(inout s : Element, 
+                  p : (src : Point, dst : Point))
+  s.l = norm(p.dst.x - p.src.x);
 end
 ```
-The `p` argument is a tuple containing the two endpoint points of the spring.
-Tuples are lists that accessed by integer indices. An alternative tuple syntax
-is `p : (Point*2)`.
 
-To apply the function to the springs we use an apply statement.
+In the function definition above, the `p` argument is a tuple containing the 
+two endpoints of the spring. To be more precise, `p` is a _named_ (or 
+_heterogeneous_) tuple, meaning that its elements can be accessed by name using 
+the `.` operator. Note that since all elements of `p` are actually of the same 
+element type, we could have instead declared `p` as an _unnamed_ (or 
+_homogeneous_) tuple that can be indexed by integral indices using parentheses, 
+as the following equivalent definition of `length` demonstrates:
+
+```
+func length(inout s : Element, p : (Point*2))
+  s.l = norm(p(1).x - p(0).x);
+end
+```
+
+Now to update the lengths of all spring elements in the `springs` set, we can 
+again use an apply statement:
 
 ```
 apply length to springs;
 ```
 
-##System Vectors and Matrices
-In addition to integer ranges, the dimensions of vectors and matrices can be a
-_set_. We call such vectors and matrices _system_ vectors and matrices and they
-can describe properties of an entire physical system. A system vector can be
-thought of as a dictionary, while a system matrix can be thought of as a
+## System Vectors and Matrices
+In addition to integer ranges, the dimensions of vectors and matrices can be 
+_sets_. We call such vectors and matrices _system_ vectors and matrices, and 
+they can describe properties of an entire physical system. A system vector can 
+be thought of as a dictionary, while a system matrix can be thought of as a
 two-dimensional dictionary (or a dictionary of dictionaries):
 
 ```
-% A vector with one float per point in points
+% A vector with one float per point in the points set
 var a : vector[points](float);
 
-% A vector with one 3-vector block per point in points
+% A vector with one 3-vector block per point 
+% in the points set
 var b : vector[points](vector[3](float));
 
-% A matrix with one 3x3 matrix block non-empty per pair of points in points
+% A matrix with one 3x3 matrix block non-empty 
+% per pair of points in the points set
 var K : matrix[points,points](matrix[3,3](float));
 ```
-Note that system matrices are sparse matrices and do not store values for all
-|points|^2 combinations.
 
-In the section on set elements we showed how an element field can be read using
-a `.`. Sets have fields to, corresponding to the fields of the set elements.
-Whereas an set element like point `p` in the set `points` may have a field such
-as `x` that is a 3-vector, the `points` sets `x` field is the system vector
-that concatenates the `x` field of all its elements.
+Note that system matrices can be sparse matrices and do not have to store 
+values for all |`points`|<sup>2</sup> combinations of indices.
 
-That is, the type of the vector `p.x` is:
-
-```
-vector[3](float)
-```
-
-while the type of `points.v` is:
+In the [Elements](#elements) section, we showed how an element field can be 
+accessed using the `.` operator. Sets also have fields, corresponding to the 
+fields of the set elements, that can be accessed using the same syntax. The 
+result of a set field read is a system vector that is constructed by 
+concatenating the corresponding fields of all elements in the set. For example, 
+if set `springs` contains elements `e0`, `e1` and `e2` (in that order) and if 
+each element has a field `m` of type `float`, then `springs.m` would correspond 
+to the system vector 
 
 ```
-vector[points](vector[3](float))
-```
+[e0.m, e1.m, e2.m]'
+``` 
+
+and would be of type `vector[springs](float)`.
 
 ## Vector and Matrix Assembly
 The key construct that ties sets to global vectors and matrices is the vector
@@ -506,18 +669,19 @@ semantics are very intuitive and are designed to let the programmer describe
 global vectors and matrices as sums of contributions from elements of a set. An
 assembly map expression, like the stencil apply, applies a local stencil
 function (called an assembly function) to each element of a set. However, each
-of these local assembly functions return a global vector and/or matrix that are
-added together by the assembly map. That is, an assembly function is a stencil
-function that returns one or more global vectors and matrices.
+of these local assembly function calls returns a global vector and/or matrix, 
+all of which are then added together by the assembly map. That is, an assembly 
+function is a stencil function that returns one or more global vectors and 
+matrices.
 
-To assemble a force vector each assembly function call returns a global vector
+To assemble a force vector, each assembly function call returns a global vector
 with the force of one element:
 
 ```
 func tet_force(tet : Element, p : (Point*4))
     -> f : vector[points](vector[3](float))
   for i in 0:4
-    f(v(i)) = compute_tet_force(tet,p,i);
+    f(p(i)) = compute_tet_force(tet,p,i);
   end
 end
 ```
@@ -545,7 +709,7 @@ func tet_stiffness(tet : Element, p : (Point*4))
     -> K : matrix[points,points](matrix[3,3](float))
   for i in 0:4
     for j in 0:4
-     K(v(i),v(j)) = compute_tet_stiffness(tet,p,i,j);
+     K(p(i),p(j)) = compute_tet_stiffness(tet,p,i,j);
     end
   end
 end
@@ -558,31 +722,93 @@ assembly map expression to assemble the stiffness matrix for the whole system:
 K = map tet_stiffness to tetrahedra reduce +;
 ```
 
+## Generic Set Dimensions
+Generics in Simit also work with vectors and matrices whose dimensions are sets 
+as opposed to integer ranges. As an example, the following function takes any 
+system (or even non-system) matrix of any size and finds the largest element in 
+the matrix (albeit in a suboptimal fashion for sparse matrices):
+
+```
+func max<M,N>(A : matrix[M,N](float)) -> b : float
+  b = -1.0 / 0.0;  % Initialize b to -inf
+  for m in M
+    for n in N
+      if A(m,n) > b
+        b = A(m,n);
+      end
+    end
+  end
+end
+```
+
+Observe that iterating over a generic set is allowed. However, it is illegal to 
+access the field of an element of a generic set.
+
+Generics can also be used to define assembly functions that can be mapped to 
+arbitrary sets (as long as they contain the same types of elements). For 
+instance, the assembly function `tet_force` from the previous section can be 
+redefined as follows:
+
+```
+func tet_force<S>(tet : Element, p : (Point*4))
+    -> f : vector[S](vector[3](float))
+  for i in 0:4
+    f(p(i)) = compute_tet_force(tet,p,i);
+  end
+end
+```
+
+The above function can then be used to assemble the force vector as before:
+
+```
+f = map tet_force to tetrahedra reduce +;
+```
+
+Once again, observe that we did not have to explicitly state what set `S` 
+corresponds to when mapping `tet_force` to the `tetrahedra` set. Since elements 
+of tuple `p` are used to index into the result vector `f` in the body of 
+`tet_force`, the compiler would actually be able to deduce that `S` must 
+correspond to the set that contains the elements of `p`, which in the case of 
+the assembly map must be the `points` set (the edge set of `tetrahedra`).
+
+
 # Built-in Functions
 The following functions are built into Simit:
 
 ## Scalar Math
-- `mod(a : int, b : int) -> c : int`
-- `sin(a : float) -> b : float`
-- `cos(a : float) -> b : float`
-- `tan(a : float) -> b : float`
-- `asin(a : float) -> b : float`
-- `acos(a : float) -> b : float`
-- `atan2(a : float, b : float) -> c : float`
-- `sqrt(a : float) -> b : float`
-- `log(a : float) -> b : float`
-- `exp(a : float) -> b : float`
-- `pow(a : float, b : float) -> c : float`
+
+| Name    | Arguments              | Result      |
+| ------- | ---------------------- | ----------- |
+| `mod`   | `a : int, b : int`     | `c : int`   |
+| `sin`   | `a : float`            | `b : float` |
+| `cos`   | `a : float`            | `b : float` |
+| `tan`   | `a : float`            | `b : float` |
+| `asin`  | `a : float`            | `b : float` |
+| `acos`  | `a : float`            | `b : float` |
+| `atan2` | `a : float, b : float` | `c : float` |
+| `sqrt`  | `a : float`            | `b : float` |
+| `log`   | `a : float`            | `b : float` |
+| `exp`   | `a : float`            | `b : float` |
+| `pow`   | `a : float, b : float` | `c : float` |
+
 
 ## Vector Math
-- `det(a : matrix[3,3](float))`
-- `inv(a : matrix[3,3](float))`
-- `norm<N>(a : vector[N](float)) -> b : vector[N](float)`
-- `dot<N>(a : vector[N](float)) -> b : vector[N](float)`
 
-## Complex Numbers
-- `createComplex(r : float, i : float) -> c : complex`
-- `complexNorm(c : complex) -> n : float`
-- `complexGetReal(c : complex) -> r : float`
-- `complexGetImag(c : complex) -> i : float`
-- `complexConj(a : complex) -> b : complex`
+| Name      | Arguments                                           | Result                   |
+| -------   | --------------------------------------------------- | ------------------------ |
+| `det`     | `a : matrix[3,3](float)`                            | `b : float`              |
+| `inv`     | `a : matrix[3,3](float)`                            | `b : matrix[3,3](float)` |
+| `norm<N>` | `a : vector[N](float)`                              | `b : float`              |
+| `dot<N>`  | `a : vector[N](float),` <br> `b : vector[N](float)` | `c : float`              | 
+
+
+## Complex Math
+
+| Name             | Arguments              | Result        |
+| ---------------- | ---------------------- | ------------- |
+| `createComplex`  | `r : float, i : float` | `c : complex` |
+| `complexNorm`    | `c : complex`          | `n : float`   |
+| `complexGetReal` | `c : complex`          | `r : float`   |
+| `complexGetImag` | `c : complex`          | `r : float`   |
+| `complexConj`    | `a : complex`          | `b : complex` |
+
