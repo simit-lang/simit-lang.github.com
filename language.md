@@ -578,7 +578,7 @@ direction. The `inout` keyword declares that `p` can be written to.
 
 ```
 func move(inout p : Point)
-  p.x(0) += 1.0;
+  p.x(0) = p.x(0) + 1.0;
 end
 ```
 
