@@ -345,6 +345,8 @@ a = b .* c;   % Vector component-wise multiplication
 a = b ./ c;   % Vector component-wise division
 A = B .* C;   % Matrix element-wise multiplication
 A = B ./ C;   % Matrix element-wise multiplication
+
+x = A \ b;    % Solve Ax = b
 ```
 
 Linear algebra operations can be composed to form complex expressions. For
@@ -523,7 +525,7 @@ C++API](api).
 
 The best ways to work with sets are to
 [apply stencil update functions](#apply-stencil-update-functions) and to
-[assemble system vectors or matrices](#assemble-vectors-and-matrices).
+[assemble system vectors or matrices](#assemble-system-vectors-and-matrices).
 
 ### Edge Sets
 Edge sets are sets that also have connectivity information. In particular, edge
@@ -663,20 +665,19 @@ to the system vector
 
 and would be of type `vector[springs](float)`.
 
-## Assemble Vectors and Matrices
-The key construct that ties sets to global vectors and matrices is the vector
-or matrix assembly. Assemblies map a set to a global vector or matrix. Their
-semantics are very intuitive and are designed to let the programmer describe
-global vectors and matrices as sums of contributions from elements of a set. An
-assembly map expression, like the stencil apply, applies a local stencil
-function (called an assembly function) to each element of a set. However, each
-of these local assembly function calls returns a global vector and/or matrix, 
-all of which are then added together by the assembly map. That is, an assembly 
-function is a stencil function that returns one or more global vectors and 
-matrices.
+## Assemble System Vectors and Matrices
+The key construct that ties sets to system vectors and matrices is the vector
+or matrix assembly. An assembly maps a set to a system vector or matrix. Its
+semantics is very intuitive and lets the programmer describe system vectors and
+matrices as sums of contributions from the elements of a set. An assembly map
+expression, like the stencil apply, applies a local stencil function (called an
+assembly function) to each element of a set. However, each assembly function
+invocation returns a system vector and/or matrix, which are then added together
+by the assembly map. That is, an assembly function is a stencil function that
+returns one or more system vectors and matrices.
 
-To assemble a force vector, each assembly function call returns a global vector
-with the force of one element:
+To assemble a force vector, each assembly function call returns a system vector
+with the force produced by a single element:
 
 ```
 func tet_force(tet : Element, p : (Point*4))
@@ -687,13 +688,15 @@ func tet_force(tet : Element, p : (Point*4))
 end
 ```
 
-Note that each `tet_force` invocation only has access to four tetrahedra points
-and can therefore only write to four locations in the force vector. This is
-very important since it prevents indexing errors and lets the compiler produce
-fast code since it knows how matrices relate to the graph. However, the
-assumption is that your sparse system only directly interacts locally. That is,
-if you want two parts to directly interact through a matrix then you need to
-connect them with an edge.
+Note that each `tet_force` invocation only has access to the four points of one
+tetrahedra and can therefore only write to four locations in the force vector.
+This is a very important constraint, which both prevents indexing errors and
+lets the compiler produce fast code since it knows how matrices relate to the
+graph. The assumption is that your sparse system only directly interacts
+locally. That is, if you want two elements to directly interact through a
+matrix then you need to connect them with an edge. (Of course, elements will
+often indirectly interact in your time stepper, for example by repeated
+matrix-vector multiplications or as a result of a linear solve.)
 
 The assembly function is applied to the elements of the tetrahedra set using an
 assembly map expression to assemble the force vector for the whole system:
@@ -702,8 +705,9 @@ assembly map expression to assemble the force vector for the whole system:
 f = map tet_force to tetrahedra reduce +;
 ```
 
-To assemble a stiffness matrix each assembly function call returns a global
-matrix with the stiffness of one element:
+To assemble a system stiffness matrix each assembly function call returns an
+element stiffness matrix, which is a system stiffness matrix with the
+contribution of just one element:
 
 ```
 func tet_stiffness(tet : Element, p : (Point*4))
@@ -724,9 +728,9 @@ K = map tet_stiffness to tetrahedra reduce +;
 ```
 
 ## Generic Set Dimensions
-Generics in Simit also work with vectors and matrices whose dimensions are sets 
-as opposed to integer ranges. As an example, the following function takes any 
-system (or even non-system) matrix of any size and finds the largest element in 
+Generics in Simit also work with vectors and matrices whose dimensions are sets
+as opposed to integer ranges. As an example, the following function takes any
+system (or even non-system) matrix of any size and finds the largest element in
 the matrix (albeit in a suboptimal fashion for sparse matrices):
 
 ```
@@ -742,12 +746,12 @@ func max<M,N>(A : matrix[M,N](float)) -> b : float
 end
 ```
 
-Observe that iterating over a generic set is allowed. However, it is illegal to 
+Observe that iterating over a generic set is allowed. However, it is illegal to
 access the field of an element of a generic set.
 
-Generics can also be used to define assembly functions that can be mapped to 
-arbitrary sets (as long as they contain the same types of elements). For 
-instance, the assembly function `tet_force` from the previous section can be 
+Generics can also be used to define assembly functions that can be mapped to
+arbitrary sets (as long as they contain the same types of elements). For
+instance, the assembly function `tet_force` from the previous section can be
 redefined as follows:
 
 ```
@@ -765,11 +769,11 @@ The above function can then be used to assemble the force vector as before:
 f = map tet_force to tetrahedra reduce +;
 ```
 
-Once again, observe that we did not have to explicitly state what set `S` 
-corresponds to when mapping `tet_force` to the `tetrahedra` set. Since elements 
-of tuple `p` are used to index into the result vector `f` in the body of 
-`tet_force`, the compiler would actually be able to deduce that `S` must 
-correspond to the set that contains the elements of `p`, which in the case of 
+Once again, observe that we did not have to explicitly state what set `S`
+corresponds to when mapping `tet_force` to the `tetrahedra` set. Since elements
+of tuple `p` are used to index into the result vector `f` in the body of
+`tet_force`, the compiler would actually be able to deduce that `S` must
+correspond to the set that contains the elements of `p`, which in the case of
 the assembly map must be the `points` set (the edge set of `tetrahedra`).
 
 
@@ -793,15 +797,23 @@ The following functions are built into Simit:
 | `pow`   | `a : float, b : float` | `c : float` |
 
 
-## Vector Math
+## Linear Algebra
 
 | Name      | Arguments                                           | Result                   |
-| -------   | --------------------------------------------------- | ------------------------ |
-| `det`     | `a : matrix[3,3](float)`                            | `b : float`              |
-| `inv`     | `a : matrix[3,3](float)`                            | `b : matrix[3,3](float)` |
-| `norm<N>` | `a : vector[N](float)`                              | `b : float`              |
-| `dot<N>`  | `a : vector[N](float),` <br> `b : vector[N](float)` | `c : float`              | 
+| --------- | --------------------------------------------------- | ------------------------ |
+| `det`     | `A : matrix[3,3](float)`                            | `b : float`              |
+| `inv`     | `A : matrix[3,3](float)`                            | `A : matrix[3,3](float)` |
+| `norm<N>` | `a : vector[V](float)`                              | `b : float`              |
+| `dot<N>`  | `a : vector[V](float),` <br> `b : vector[V](float)` | `c : float`              |
 
+## Solvers
+
+| Name          | Arguments                                                                        | Result                 |
+| ------------- | -------------------------------------------------------------------------------- | ---------------------- |
+| `chol`        | `A : matrix[V,V](float)`                                                         | `solver : opaque`      |
+| `cholfree`    | `solver : opaque`                                                                |                        |
+| `lltsolve`    | `solver : opaque,` <br> `A : matrix[V,V](float),` <br> `b : vector[V](float)`    | `x : vector[V](float)` |
+| `lltmatsolve` | `solver : opaque,` <br> `A : matrix[V,V](float),` <br> `B : vector[V,V](float)`  | `x : vector[V](float)` |
 
 ## Complex Math
 
