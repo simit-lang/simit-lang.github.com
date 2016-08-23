@@ -15,14 +15,14 @@ on those graphs. The Simit APIs lives in the `simit::` namespace.
 The Simit Graph API lets you construct graphs from sets, add elements to those
 sets and write data to those elements. The main class is `Set`:
 
-``` c++
+```c++
 Set points;
 ```
 
 A Simit set may be an edge set that connects other sets. The `Set` constructor
 can take a variable number of `Set` arguments that the resulting set connects:
 
-``` c++
+```c++
 Set springs(points, points);
 ```
 
@@ -30,7 +30,7 @@ The next step is to add one or more field to the set. Adding a field to a set
 means that every element added to the set has that field. To add a field `m`
 that contains the mass of each spring we use the `simit::Set::addField` method:
 
-``` c++
+```cpp
 FieldRef<double> m = springs.addField<double>("m");
 ```
 
@@ -41,7 +41,7 @@ supports `bool`, `int` and `float` fields.
 We can also specify vector and matrix fields using additional template
 arguments:
 
-``` c++
+```c++
 // Create a field with a 3-vector per set element
 FieldRef<double,3> x = springs.addField<double,3>("x");
 
