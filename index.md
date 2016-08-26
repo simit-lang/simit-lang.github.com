@@ -40,4 +40,6 @@ you to use it in open source or commercial projects!
 To learn more about the Simit programming model check out our [TOG 2016
 paper](tog16):
 <iframe width="500" height="281" src="{{site.data.papers.tog16.movie}}" frameborder="0" allowfullscreen></iframe>
-<br/>
+
+Or see a talk about Simit at Microsoft Research:
+<iframe width="500" height="281" src="https://www.youtube.com/embed/raPkxhHy5ro" frameborder="0" allowfullscreen></iframe>
