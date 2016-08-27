@@ -344,7 +344,7 @@ A = c' * B;   % Vector-matrix multiplication
 a = b .* c;   % Vector component-wise multiplication
 a = b ./ c;   % Vector component-wise division
 A = B .* C;   % Matrix element-wise multiplication
-A = B ./ C;   % Matrix element-wise multiplication
+A = B ./ C;   % Matrix element-wise division
 
 x = A \ b;    % Solve Ax = b
 ```
