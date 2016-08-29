@@ -332,7 +332,8 @@ mat12 = [[1, 2]];
 
 ## Linear Algebra
 Simit supports a wide variety of basic linear algebra operations, as shown
-below. (In the following examples, `b` and `c` are column vectors.)
+below. (In the following examples, `b` and `c` are column vectors and `r` is 
+a scalar.)
 
 ```
 a = b  + c;   % Vector addition
@@ -346,8 +347,12 @@ A = B - C;    % Matrix subtraction
 A = B * C;    % Matrix multiplication
 A = B';       % Matrix transpose
 
+a = r  * b;   % Scalar-vector multiplication
+a = b  * r;   % Vector-scalar multiplication
+A = r  * B;   % Scalar-matrix multiplication
+A = B  * r;   % Matrix-scalar multiplication
 A = B  * c;   % Matrix-vector multiplication
-A = c' * B;   % Vector-matrix multiplication
+A = b' * C;   % Vector-matrix multiplication
 
 a = b .* c;   % Vector component-wise multiplication
 a = b ./ c;   % Vector component-wise division
