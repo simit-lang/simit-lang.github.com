@@ -10,6 +10,14 @@ This guide introduces Simit language features and shows how they can be used in
 programs. We assume that you are already familiar with imperative programming
 and some linear algebra.
 
+Simit is a linear algebra language with control flow. The main difference
+between Simit and other linear algebra languages, such as Matlab and Julia, is
+its [hypergraph data structure](#elements-sets-and-graphs) that is used to
+represent sparse systems, its [vector/matrix type
+system](#system-vectors-and-matrices) that ties them to the hypergraph, and the
+[vector/matrix assembly](#assemble-system-vectors-and-matrices) that lets you
+assemble system vectors and matrices from hypergraphs.
+
 * auto-gen TOC:
 {:toc}
 
