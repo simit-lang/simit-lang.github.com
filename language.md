@@ -582,6 +582,24 @@ tetrahedra.
 extern links : set{Link}(triangles, tetrahedra);
 ```
 
+### Grid Edge Sets
+Simit also supports declaring edge sets which connect points in a regular
+grid pattern with a particular dimensionality. The following declares a
+three-dimensional grid over the `points` set, meaning it contains links
+connecting each point to six other points (in the six cardinal directions
+one can move for a three-dimensional grid):
+
+```
+extern springsGrid : grid[3]{Element}(points);
+```
+
+While one could build such a structure using a generic edge set, specifying this
+structure enables [coordinate-based accessing](#coordinate-based-access) when
+assembling matrices based on grid edge sets.
+
+Because these edge sets have very particular structure, extern grid edge sets
+are assembled with different syntax in the [Simit C++ API](api).
+
 ## Apply Stencil Update Functions
 
 A stencil update function is any function that takes as arguments an element
@@ -738,6 +756,59 @@ assembly map expression to assemble the stiffness matrix for the whole system:
 
 ```
 K = map tet_stiffness to tetrahedra reduce +;
+```
+
+## Coordinate-Based Access
+In [applying stencil update functions](#apply-stencil-update-functions) and
+[assembling system matrices and vectors](#assembly-system-vectors-and-matrices)
+using grid edge sets, Simit also supports coordinate-based access. Enabling
+coordinate-based access requires supplying a grid edge set using the `through`
+syntax. The following demonstrates a stencil update application with grid
+coordinates enabled:
+
+```
+apply average to points through springsGrid;
+```
+
+Using coordinate-based access within the stencil function requires accepting
+both the node set and grid edge set as additional arguments to the function.
+These set arguments may then by indexed by coordinate indices _relative_ to
+the origin node (the first argument) using brackets and constant integer offets.
+The following demonstrates a stencil which accesses neighbors one hop
+away in all cardinal directions to apply a value average:
+
+```
+func average(inout p : Point, points : set{Point},
+             links : grid[3]{Element}(points))
+  p.val = (0.167)*(points[1,0,0].val + points[-1,0,0].val +
+                   points[0,1,0].val + points[0,-1,0].val +
+                   points[0,0,1].val + points[0,0,-1].val);
+end
+```
+
+The links passed for coordinate-based access not only provide structure but may
+also be accessed as part of the stencil function. To access a link, one must
+specify both the source and sink of the link in brackets, separated by a
+semicolon. The following demonstrates assembling a force vector for a grid of
+springs with individual spring constants:
+
+```
+func spring_force(p : Point, points : set{Point},
+                  springs : grid[2]{Spring}(points))
+    -> f : vector[points](vector[3](float))
+  force1 = (points[1,0].x - p.x) * springs[0,0; 1,0].k;
+  force2 = (points[0,1].x - p.x) * springs[0,0; 0,1].k;
+  force3 = (points[-1,0].x  - p.x) * springs[0,0; -1,0].k;
+  force4 = (points[0,-1].x - p.x) * springs[0,0; 0,-1].k;
+  f(p) = force1 + force2 + force3 + force4;
+end
+```
+
+This assembly function is applied to the elements of the point set using an
+assembly map expression with the `through` keyword:
+
+```
+f = map spring_force to points through springsGrid;
 ```
 
 ## Generic Set Dimensions
