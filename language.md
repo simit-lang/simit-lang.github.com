@@ -759,30 +759,34 @@ K = map tet_stiffness to tetrahedra reduce +;
 ```
 
 ## Coordinate-Based Access
-In [applying stencil update functions](#apply-stencil-update-functions) and
+In
+<!-- not supported yet: [applying stencil update functions]
+     (#apply-stencil-update-functions) and -->
 [assembling system matrices and vectors](#assembly-system-vectors-and-matrices)
 using grid edge sets, Simit also supports coordinate-based access. Enabling
 coordinate-based access requires supplying a grid edge set using the `through`
-syntax. The following demonstrates a stencil update application with grid
-coordinates enabled:
+syntax. The following demonstrates a vector assembly with grid coordinates:
+<!-- not supported yet:
+The following demonstrates a stencil update application with grid
+coordinates enabled: -->
 
 ```
-apply average to points through springsGrid;
+v = map average to points through springsGrid;
 ```
 
-Using coordinate-based access within the stencil function requires accepting
-both the node set and grid edge set as additional arguments to the function.
-These set arguments may then by indexed by coordinate indices _relative_ to
-the origin node (the first argument) using brackets and constant integer offets.
-The following demonstrates a stencil which accesses neighbors one hop
-away in all cardinal directions to apply a value average:
+Using coordinate-based access within the assembly function requires accepting
+the grid edge set as additional argument to the function. The underlying node
+set may then by indexed by coordinate indices _relative_ to the origin node
+(the first argument) using brackets and constant integer offets. The following
+demonstrates assembling an average value vector incorporating elements one hop
+away in all cardinal directions.
 
 ```
-func average(inout p : Point, points : set{Point},
-             links : grid[3]{Element}(points))
-  p.val = (0.167)*(points[1,0,0].val + points[-1,0,0].val +
-                   points[0,1,0].val + points[0,-1,0].val +
-                   points[0,0,1].val + points[0,0,-1].val);
+func average(p : Point, links : grid[3]{Element}(points))
+    -> v : vector[points](float)
+  v(p) = (0.167)*(points[1,0,0].val + points[-1,0,0].val +
+                  points[0,1,0].val + points[0,-1,0].val +
+                  points[0,0,1].val + points[0,0,-1].val);
 end
 ```
 
