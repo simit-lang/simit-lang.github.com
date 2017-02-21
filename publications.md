@@ -10,5 +10,5 @@ _Fredrik Kjolstad, Shoaib Kamil, Jonathan Ragan-Kelley, David I. W. Levin, Shinj
 **[Why New Programming Languages for Simulation?](tog16e)** &nbsp; [[pdf]]({{site.data.papers.tog16e.paper}}) [[bibtex]](tog16e#bibtex) <br/>
 _Gilbert Louis Bernstein and Fredrik Kjolstad_
 
-**[The Tensor Algebra Compiler](taco17)** &nbsp; [[pdf]]({{site.data.papers.taco17.paper}}) [[bibtex]](taco17e#bibtex) <br/>
+**[The Tensor Algebra Compiler](taco17)** &nbsp; [[pdf]]({{site.data.papers.taco17.paper}}) [[bibtex]](taco17#bibtex) <br/>
 _Fredrik Kjolstad, Shoaib Kamil, Stephen Chou, David Lugato and Saman Amarasinghe_
