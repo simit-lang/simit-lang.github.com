@@ -35,5 +35,6 @@ Paper: [[pdf]]({{site.data.papers.taco17.paper}})
      year={2017},
      month={February},
      publisher={CSAIL},
+     source={http://hdl.handle.net/1721.1/107013},
      keywords = {Tensor, tensor algebra, linear algebra, C++ library}
    }
