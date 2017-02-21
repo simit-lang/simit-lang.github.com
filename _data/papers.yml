@@ -20,3 +20,12 @@ tog16e:
     - gilbert
     - fred
   paper: http://groups.csail.mit.edu/commit/papers/2016/why.pdf
+
+taco17:
+  authors:
+    - fred
+    - shoaib
+    - stephen
+    - lugato
+    - saman
+  paper: http://groups.csail.mit.edu/commit/papers/2017/tensor-compiler-techreport.pdf
