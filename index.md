@@ -39,7 +39,7 @@ you to use it in open source or commercial projects!
 
 **News**: We are building a sparse linear/tensor algebra compiler to serve as a new engine for Simit, so that we improve performance and add new features such as support for constraints and tensors.
 The tensor algebra compiler will also be available as a standalone C++ sparse linear/tensor algebra library.
-For more information go to [tensor-compiler.org](tensor-compiler.org).
+For more information go to [tensor-compiler.org](http://tensor-compiler.org).
 
 To learn more about the Simit programming model check out our [TOG 2016
 paper](tog16).
