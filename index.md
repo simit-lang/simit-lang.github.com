@@ -37,7 +37,7 @@ Simit is open source, under a [commercially permissive MIT
 license](https://github.com/simit-lang/simit/blob/master/LICENSE). We encourage
 you to use it in open source or commercial projects!
 
-***News***: We are building a sparse linear/tensor algebra compiler to serve as a new engine for Simit, so that we improve performance and add new features such as support for constraints and tensors.
+**News**: We are building a sparse linear/tensor algebra compiler to serve as a new engine for Simit, so that we improve performance and add new features such as support for constraints and tensors.
 The tensor algebra compiler will also be available as a standalone C++ sparse linear/tensor algebra library
 For more information go to [tensor-compiler.org](tensor-compiler.org).
 
